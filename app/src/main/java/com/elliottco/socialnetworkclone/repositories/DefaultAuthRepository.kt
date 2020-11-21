@@ -1,4 +1,4 @@
-package com.elliottco.socialnetworkclone.ui.auth.repository
+package com.elliottco.socialnetworkclone.repositories
 
 import com.elliottco.socialnetworkclone.data.entities.User
 import com.elliottco.socialnetworkclone.misc.Resource
