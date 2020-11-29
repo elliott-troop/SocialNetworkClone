@@ -1,7 +1,8 @@
-package com.elliottco.socialnetworkclone
+package com.elliottco.socialnetworkclone.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.elliottco.socialnetworkclone.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
