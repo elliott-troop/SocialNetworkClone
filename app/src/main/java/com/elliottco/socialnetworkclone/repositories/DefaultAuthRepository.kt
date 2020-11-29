@@ -34,6 +34,11 @@ class DefaultAuthRepository : AuthRepository {
     }
 
     override suspend fun login(email: String, password: String): Resource<AuthResult> {
-        TODO("Not yet implemented")
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val result = auth.signInWithEmailAndPassword(email, password).await()
+                Resource.Success(result)
+            }
+        }
     }
 }
