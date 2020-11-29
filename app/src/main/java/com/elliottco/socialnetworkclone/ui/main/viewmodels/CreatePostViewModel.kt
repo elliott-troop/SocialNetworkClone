@@ -22,6 +22,13 @@ class CreatePostViewModel @ViewModelInject constructor(
     private val _createPostStatus = MutableLiveData<Event<Resource<Any>>>()
     val createPostStatus: LiveData<Event<Resource<Any>>> = _createPostStatus
 
+    private val _currentImageUri = MutableLiveData<Uri>()
+    val currentImageUri: LiveData<Uri> = _currentImageUri
+
+    fun setCurretImageUri(uri: Uri) {
+        _currentImageUri.postValue(uri)
+    }
+
     fun createPost(imageUri: Uri, text: String) {
         if(text.isEmpty()) {
             val error = applicationContext.getString(R.string.error_input_empty)

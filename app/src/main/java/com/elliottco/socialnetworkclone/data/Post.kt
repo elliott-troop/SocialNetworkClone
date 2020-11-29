@@ -12,10 +12,10 @@ data class Post(
         val authorUid: String = "",
 
         // The username can change, so we don't want to tie that to the post
-        @Exclude var authorUsername: String = "",
+        @get:Exclude var authorUsername: String = "",
 
         // The user's profile picture can change, so we don't want to tie that to the post
-        @Exclude var authorProfilePictureUrl: String = "",
+        @get:Exclude var authorProfilePictureUrl: String = "",
 
         val text: String = "",
 
@@ -25,10 +25,10 @@ data class Post(
         // Date when the post was created (in milliseconds)
         val date: Long = 0L,
 
-        @Exclude var isLiked: Boolean = false,
+        @get:Exclude var isLiked: Boolean = false,
 
         // Used to offset delay for liking a post
-        @Exclude var isLiking: Boolean = false,
+        @get:Exclude var isLiking: Boolean = false,
 
         // List of user ID's that have liked this post
         val likedBy: List<String> = listOf()
