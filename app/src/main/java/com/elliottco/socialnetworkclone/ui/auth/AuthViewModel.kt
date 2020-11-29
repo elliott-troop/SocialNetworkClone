@@ -29,7 +29,7 @@ class AuthViewModel @ViewModelInject constructor(
     private val _registerStatus = MutableLiveData<Event<Resource<AuthResult>>>()
     val registerStatus: LiveData<Event<Resource<AuthResult>>> = _registerStatus
 
-    fun register(email: String, username: String, password: String, repeatedPassword: String) {
+    fun register(email: String, password: String, repeatedPassword: String, username: String) {
         val error = if(email.isEmpty() || username.isEmpty() || password.isEmpty()) {
             applicationContext.getString(R.string.error_input_empty)
         } else if(password != repeatedPassword) {
@@ -49,7 +49,7 @@ class AuthViewModel @ViewModelInject constructor(
             return
         }
         _registerStatus.postValue(Event(Resource.Loading()))
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             val result = repository.register(email, username, password)
             _registerStatus.postValue(Event(result))
         }
