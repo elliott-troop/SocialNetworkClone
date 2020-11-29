@@ -13,7 +13,7 @@
         android:title="" />
 
     <item android:id="@+id/profileFragment"
-        android:title="@string/your_profile"
+        android:title="@string/profile"
         android:icon="@drawable/ic_person" />
 
     <item android:id="@+id/settingsFragment"
