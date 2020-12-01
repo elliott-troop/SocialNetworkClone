@@ -17,6 +17,7 @@ import com.bumptech.glide.RequestManager
 import com.elliottco.socialnetworkclone.R
 import com.elliottco.socialnetworkclone.misc.EventObserver
 import com.elliottco.socialnetworkclone.ui.main.viewmodels.CreatePostViewModel
+import com.elliottco.socialnetworkclone.ui.slideUpViews
 import com.elliottco.socialnetworkclone.ui.snackbar
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -88,6 +89,8 @@ class CreatePostFragment : Fragment() {
                 viewModel.createPost(uri, etPostDescription.text.toString())
             } ?: snackbar(getString(R.string.error_no_image_chosen))
         }
+
+        slideUpViews(requireContext(), ivPostImage, btnSetPostImage,tilPostText, btnPost)
     }
 
     private fun subscribeToObservers() {
