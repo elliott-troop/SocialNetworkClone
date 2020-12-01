@@ -8,7 +8,7 @@ import android.view.MenuItem
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.elliottco.socialnetworkclone.AuthActivity
+import com.elliottco.socialnetworkclone.ui.auth.AuthActivity
 import com.elliottco.socialnetworkclone.R
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,8 +1,9 @@
-package com.elliottco.socialnetworkclone
+package com.elliottco.socialnetworkclone.ui.auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.elliottco.socialnetworkclone.R
 import com.elliottco.socialnetworkclone.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
