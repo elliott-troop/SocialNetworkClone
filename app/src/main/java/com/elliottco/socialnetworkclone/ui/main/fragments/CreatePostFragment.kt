@@ -34,7 +34,7 @@ class CreatePostFragment : Fragment() {
 
     private lateinit var cropContent: ActivityResultLauncher<String>
 
-    private val cropActvityResultContract = object : ActivityResultContract<String, Uri?>() {
+    private val cropActivityResultContract = object : ActivityResultContract<String, Uri>() {
         override fun createIntent(context: Context, input: String?): Intent {
             return CropImage.activity()
                     .setAspectRatio(16, 9)
@@ -42,8 +42,12 @@ class CreatePostFragment : Fragment() {
                     .getIntent(requireContext())
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
-            return CropImage.getActivityResult(intent).uri
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri {
+            // Check if the CropImage activity returns a URI. If not, return Uri.Empty
+            return if(resultCode == -1)
+             CropImage.getActivityResult(intent).uri
+            else
+                Uri.EMPTY
         }
     }
 
@@ -52,10 +56,10 @@ class CreatePostFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        cropContent = registerForActivityResult(cropActvityResultContract) {
-            it?.let {
+        // Register callback for activity result
+        cropContent = registerForActivityResult(cropActivityResultContract) {
+            if(it != Uri.EMPTY)
                 viewModel.setCurretImageUri(it)
-            }
         }
     }
 
@@ -87,10 +91,14 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun subscribeToObservers() {
-        viewModel.currentImageUri.observe(viewLifecycleOwner) {
-            currentImageUri = it
-            btnSetPostImage.isVisible = false
-            glide.load(currentImageUri).into(ivPostImage)
+        viewModel.currentImageUri.observe(viewLifecycleOwner) { uri ->
+            currentImageUri = uri
+
+            if(uri != Uri.EMPTY) {
+                btnSetPostImage.isVisible = false
+                glide.load(currentImageUri).into(ivPostImage)
+            }
+
         }
 
         viewModel.createPostStatus.observe(viewLifecycleOwner, EventObserver(
