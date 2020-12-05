@@ -2,6 +2,7 @@ package com.elliottco.socialnetworkclone.repositories
 
 import android.net.Uri
 import com.elliottco.socialnetworkclone.data.Post
+import com.elliottco.socialnetworkclone.data.entities.User
 import com.elliottco.socialnetworkclone.misc.Resource
 import com.elliottco.socialnetworkclone.misc.safeCall
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +13,7 @@ import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.lang.IllegalStateException
 import java.util.*
 
 @ActivityScoped
@@ -42,6 +44,35 @@ class DefaultMainRepository : MainRepository {
 
                 posts.document(postId).set(post).await()
                 Resource.Success(Any())
+            }
+        }
+    }
+
+    override suspend fun getUsers(uids: List<String>): Resource<List<User>> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                // Query users collection
+                val usersList = users.whereIn("uid", uids).orderBy("username").get().await()
+                        .toObjects(User::class.java)
+                Resource.Success(usersList)
+            }
+        }
+    }
+
+    override suspend fun getUser(uid: String): Resource<User> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val searchedUser = users.document(uid).get().await().toObject(User::class.java)
+                        ?: throw IllegalStateException()
+
+                val currentUid = FirebaseAuth.getInstance().uid!!
+                val currentUser = users.document(currentUid).get().await().toObject(User::class.java)
+                        ?: throw IllegalStateException()
+
+                // Set isFollowing to true if the searched user is followed by the current user
+                searchedUser.isFollowing = uid in currentUser.follows
+                
+                Resource.Success(searchedUser)
             }
         }
     }
