@@ -140,4 +140,23 @@ class DefaultMainRepository : MainRepository {
             }
         }
     }
+
+    override suspend fun getPostForUser(uid: String): Resource<List<Post>> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val profilePosts = posts.whereEqualTo("authorUid", uid)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .await()
+                        .toObjects(Post::class.java)
+                        .onEach { post ->
+                            val author = getUser(post.authorUid).data!!
+                            post.authorProfilePictureUrl = author.profilePictureUrl
+                            post.authorUsername = author.username
+                            post.isLiked = uid in post.likedBy
+                        }
+                Resource.Success(profilePosts)
+            }
+        }
+    }
 }
