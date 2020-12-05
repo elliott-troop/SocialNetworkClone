@@ -141,7 +141,7 @@ class DefaultMainRepository : MainRepository {
         }
     }
 
-    override suspend fun getPostForUser(uid: String): Resource<List<Post>> {
+    override suspend fun getPostsForUser(uid: String): Resource<List<Post>> {
         return withContext(Dispatchers.IO) {
             safeCall {
                 val profilePosts = posts.whereEqualTo("authorUid", uid)
