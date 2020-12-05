@@ -31,5 +31,5 @@ data class Post(
         @get:Exclude var isLiking: Boolean = false,
 
         // List of user ID's that have liked this post
-        val likedBy: List<String> = listOf()
+        var likedBy: List<String> = listOf()
 )

@@ -97,7 +97,9 @@ class PostAdapter @Inject constructor(
 
             ibLike.setOnClickListener {
                 onLikeClickListener?.let { click ->
-                    click(post, holder.layoutPosition)
+                    // Only allow the user to like/unlike post if not currently liking/unliking
+                    if(!post.isLiking)
+                        click(post, holder.layoutPosition)
                 }
             }
 
