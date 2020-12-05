@@ -31,4 +31,6 @@ interface MainRepository {
     suspend fun getPostsForUser(uid: String): Resource<List<Post>>
 
     suspend fun toggleFollowForUser(uid: String): Resource<Boolean>
+
+    suspend fun searchUser(query: String): Resource<List<User>>
 }

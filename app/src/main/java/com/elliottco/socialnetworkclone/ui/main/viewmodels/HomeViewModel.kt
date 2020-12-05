@@ -15,13 +15,13 @@ class HomeViewModel @ViewModelInject constructor(
         private val repository: MainRepository
 ) : BasePostViewModel(repository) {
 
-    init {
-        getPosts()
-    }
-
     private val _posts = MutableLiveData<Event<Resource<List<Post>>>>()
     override val posts: LiveData<Event<Resource<List<Post>>>>
         get() = _posts
+
+    init {
+        getPosts()
+    }
 
     // Show list of posts from users the current user is following
     override fun getPosts(uid: String) {
