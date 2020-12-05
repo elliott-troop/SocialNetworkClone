@@ -7,6 +7,7 @@ import com.elliottco.socialnetworkclone.misc.Resource
 import com.elliottco.socialnetworkclone.misc.safeCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.scopes.ActivityScoped
@@ -65,14 +66,37 @@ class DefaultMainRepository : MainRepository {
                 val searchedUser = users.document(uid).get().await().toObject(User::class.java)
                         ?: throw IllegalStateException()
 
-                val currentUid = FirebaseAuth.getInstance().uid!!
-                val currentUser = users.document(currentUid).get().await().toObject(User::class.java)
+                val currentUserUid = FirebaseAuth.getInstance().uid!!
+                val currentUser = users.document(currentUserUid).get().await().toObject(User::class.java)
                         ?: throw IllegalStateException()
 
                 // Set isFollowing to true if the searched user is followed by the current user
                 searchedUser.isFollowing = uid in currentUser.follows
-                
+
                 Resource.Success(searchedUser)
+            }
+        }
+    }
+
+    override suspend fun getPostsForFollows(): Resource<List<Post>> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val currentUserUid = FirebaseAuth.getInstance().uid!!
+                val followedUsers = getUser(currentUserUid).data!!.follows
+
+                // Get posts ordered by date
+                val allPosts = posts.whereIn("authorUid", followedUsers)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get()
+                        .await()
+                        .toObjects(Post::class.java)
+                        .onEach { post ->
+                            val author = getUser(post.authorUid).data!!
+                            post.authorProfilePictureUrl = author.profilePictureUrl
+                            post.authorUsername = author.username
+                            post.isLiked = currentUserUid in post.likedBy
+                        }
+                Resource.Success(allPosts)
             }
         }
     }
