@@ -126,4 +126,18 @@ class DefaultMainRepository : MainRepository {
             }
         }
     }
+
+    override suspend fun deletePost(post: Post): Resource<Post> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                // Delete the post in Firestore
+                posts.document(post.id).delete().await()
+
+                // Delete the image from Cloud Storage
+                storage.getReferenceFromUrl(post.imageUrl).delete().await()
+
+                Resource.Success(post)
+            }
+        }
+    }
 }
