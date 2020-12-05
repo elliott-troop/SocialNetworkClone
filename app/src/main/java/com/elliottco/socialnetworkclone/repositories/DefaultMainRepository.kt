@@ -116,8 +116,8 @@ class DefaultMainRepository : MainRepository {
                             if(currentUserUid in currentLikes)
                                 currentLikes - currentUserUid
                             else {
-                                currentLikes + currentUserUid
                                 isLiked = true
+                                currentLikes + currentUserUid
                             }
                     )
                 }.await()
@@ -157,6 +157,24 @@ class DefaultMainRepository : MainRepository {
                         }
                 Resource.Success(profilePosts)
             }
+        }
+    }
+
+    override suspend fun toggleFollowForUser(uid: String): Resource<Boolean> {
+        return withContext(Dispatchers.IO) {
+
+            var isFollowing = false
+
+            firestore.runTransaction { transaction ->
+                val currentUid = auth.uid!!
+                val currentUser = transaction.get(users.document(currentUid)).toObject(User::class.java)!!
+                isFollowing = uid in currentUser.follows
+
+                val newFollows = if(isFollowing) currentUser.follows - uid else currentUser.follows + uid
+                transaction.update(users.document(currentUid), "follows", newFollows)
+            }.await()
+
+            Resource.Success(!isFollowing)
         }
     }
 }
