@@ -100,4 +100,30 @@ class DefaultMainRepository : MainRepository {
             }
         }
     }
+
+    override suspend fun toggleLikeForPost(post: Post): Resource<Boolean> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                var isLiked = false
+                firestore.runTransaction { transaction ->
+                    val currentUserUid = FirebaseAuth.getInstance().uid!!
+                    val postResult = transaction.get(posts.document(post.id))
+                    val currentLikes = postResult.toObject(Post::class.java)?.likedBy
+                            ?: listOf()
+                    transaction.update(
+                            posts.document(post.id),
+                            "likedBy",
+                            if(currentUserUid in currentLikes)
+                                currentLikes - currentUserUid
+                            else {
+                                currentLikes + currentUserUid
+                                isLiked = true
+                            }
+                    )
+                }.await()
+
+                Resource.Success(isLiked)
+            }
+        }
+    }
 }
