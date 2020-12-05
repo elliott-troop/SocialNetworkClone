@@ -13,9 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Base class view models that need to load up a list of posts
+ * Base view model to load up a list of posts
  */
-abstract class BaseViewModel(
+abstract class BasePostViewModel(
         private val repository: MainRepository
 ) : ViewModel() {
 
