@@ -28,7 +28,7 @@ abstract class BasePostViewModel(
     private val _likedByUsers = MutableLiveData<Event<Resource<List<User>>>>()
     val likedByUsers: LiveData<Event<Resource<List<User>>>> = _likedByUsers
 
-    abstract val posts: LiveData<Event<Resource<Post>>>
+    abstract val posts: LiveData<Event<Resource<List<Post>>>>
 
     abstract fun getPosts(uid: String = "")
 

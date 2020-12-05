@@ -78,7 +78,7 @@ class DefaultMainRepository : MainRepository {
         }
     }
 
-    override suspend fun getPostsForFollows(): Resource<List<Post>> {
+    override suspend fun getPostsFromFollowing(): Resource<List<Post>> {
         return withContext(Dispatchers.IO) {
             safeCall {
                 val currentUserUid = FirebaseAuth.getInstance().uid!!
