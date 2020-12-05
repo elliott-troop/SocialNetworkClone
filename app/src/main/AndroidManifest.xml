@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialNetworkClone"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainActivity" android:screenOrientation="portrait"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name=".ui.auth.AuthActivity">
+        <activity android:name=".ui.auth.AuthActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
