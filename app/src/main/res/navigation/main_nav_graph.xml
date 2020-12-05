@@ -30,7 +30,17 @@
         android:name="com.elliottco.socialnetworkclone.ui.main.fragments.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/othersProfileFragment"
+        android:name="com.elliottco.socialnetworkclone.ui.main.fragments.OthersProfileFragment"
+        android:label="OthersProfileFragment" >
+        <argument
+            android:name="uid"
+            app:argType="string" />
+    </fragment>
 
+    <action android:id="@+id/globalActionToOthersProfileFragment"
+        app:destination="@id/othersProfileFragment" />
     <action android:id="@+id/globalActionToCreatePostFragment"
         app:destination="@id/createPostFragment" />
 </navigation>
