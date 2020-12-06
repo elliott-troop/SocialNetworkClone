@@ -33,6 +33,8 @@ abstract class BasePostViewModel(
     abstract fun getPosts(uid: String = "")
 
     fun getUsers(uids: List<String>) {
+        if(uids.isEmpty()) return
+
         _likedByUsers.postValue(Event(Resource.Loading()))
 
         viewModelScope.launch(Dispatchers.Main) {
